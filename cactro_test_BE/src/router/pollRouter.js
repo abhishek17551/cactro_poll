@@ -5,10 +5,11 @@ const pollRouter = express.Router()
 pollRouter.post('/polls', async (req, res) => {
     try {
         const { question, options } = req.body;
-        const existingPoll = await Poll.findOne(
-            { question: question.trim() },
-            { collation: { locale: "en", strength: 2 } }
-        );
+        const normalizedQuestion = question.trim();
+        const existingPoll = await Poll.findOne({
+            question: { $regex: new RegExp(`^${normalizedQuestion}$`, "i") }
+        });
+        
 
         if (existingPoll) {
             return res.status(400).json({ message: "A poll with this question already exists!" });
@@ -38,7 +39,7 @@ pollRouter.post('/polls', async (req, res) => {
 
 pollRouter.get('/polls', async (req, res) => {
     try {
-        const polls = await Poll.find();
+        const polls = await Poll.find().sort({ createdAt: -1 }); // Sort by latest first
 
         res.json({
             message: 'All Polls',
@@ -50,6 +51,7 @@ pollRouter.get('/polls', async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 
 pollRouter.get('/polls/:id', async (req, res) => {
