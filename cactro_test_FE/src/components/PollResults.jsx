@@ -13,12 +13,12 @@ const PollResults = ({ poll }) => {
   }, [poll._id]);
 
   return (
-    <div>
-      <h2>Poll Results</h2>
-      <h3>{results.question}</h3>
-      {results && results.options.map((option) => (
-        <div key={option._id}>
-          {option.text}: {option.voteCount} votes
+    <div className="bg-white p-4 rounded-lg shadow mt-4">
+      <h2 className="text-lg font-bold">Poll Result</h2>
+      {results.options.map((option) => (
+        <div key={option._id} className="flex justify-between items-center bg-gray-100 p-2 rounded my-1">
+          <span>{option.text}</span>
+          <span className="font-bold">{option.voteCount} votes</span>
         </div>
       ))}
     </div>

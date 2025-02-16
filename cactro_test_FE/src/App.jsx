@@ -16,18 +16,26 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <CreatePoll />
-      {polls && polls.map((poll) => (
-        <div key={poll._id}>
-          <VotePoll poll={poll} />
-        </div>
-      ))}
-      {polls && polls.map((poll) => (
-        <div key={poll._id}>
-          <PollResults poll={poll} />
-        </div>
-      ))}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-6">Polling App</h1>
+
+        <CreatePoll setPolls={setPolls} />
+
+        {polls.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold mb-4 text-center">Active Polls</h2>
+            <div className="space-y-6">
+              {polls.map((poll) => (
+                <div key={poll._id} className="bg-white p-4 rounded-lg shadow">
+                  <VotePoll poll={poll} />
+                  <PollResults poll={poll} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
